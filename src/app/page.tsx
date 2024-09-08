@@ -1,9 +1,7 @@
-import AuthScreen from "./features/auth/components/AuthScreen";
+"use client";
 
 export default function Home() {
   return (
-    <>
-      <AuthScreen />
-    </>
+    <main className="flex min-h-screen flex-col items-center justify-between p-24"></main>
   );
 }
