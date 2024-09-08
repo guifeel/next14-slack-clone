@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { SignInFlow } from "../types";
 import SignInCard from "./SignInCard";
-import SignOutCard from "./SignUpCard";
+import SignUpCard from "./SignUpCard";
 
 const AuthScreen = () => {
   const [state, setState] = useState<SignInFlow>("signIn");
@@ -15,7 +15,7 @@ const AuthScreen = () => {
         {state === "signIn" ? (
           <SignInCard setState={setState} />
         ) : (
-          <SignOutCard setState={setState} />
+          <SignUpCard setState={setState} />
         )}
       </div>
     </div>

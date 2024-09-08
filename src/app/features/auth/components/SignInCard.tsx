@@ -10,6 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useAuthActions } from "@convex-dev/auth/react";
+import { TriangleAlert } from "lucide-react";
 import { useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
@@ -24,10 +25,20 @@ const SignInCard = ({ setState }: SignInCardProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [pending, setPending] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleProviderSignIn = (value: "github" | "google") => {
+  const onProviderSignIn = (value: "github" | "google") => {
     setPending(true);
     signIn(value).finally(() => setPending(false));
+  };
+
+  const onPasswordSignIn = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    setPending(true);
+    signIn("password", { email, password, flow: "signIn" })
+      .catch(() => setError("用户名或密码错误！"))
+      .finally(() => setPending(false));
   };
 
   return (
@@ -36,8 +47,14 @@ const SignInCard = ({ setState }: SignInCardProps) => {
         <CardTitle>登录</CardTitle>
         <CardDescription>使用邮箱或其它方式登录</CardDescription>
       </CardHeader>
+      {!!error && (
+        <div className="bg-destructive/15 p-3 rounded-md flex items-center justify-center gap-x-2 text-sm text-destructive mb-6">
+          <TriangleAlert className="size-4" />
+          <p>{error}</p>
+        </div>
+      )}
       <CardContent className="px-0 pt-0 space-y-5">
-        <form className="space-y-2.5">
+        <form className="space-y-2.5" onSubmit={onPasswordSignIn}>
           <Input
             type="email"
             placeholder="邮箱"
@@ -64,7 +81,7 @@ const SignInCard = ({ setState }: SignInCardProps) => {
             variant="outline"
             size="lg"
             className="w-full relative"
-            onClick={() => handleProviderSignIn("google")}
+            onClick={() => onProviderSignIn("google")}
             disabled={pending}
           >
             <FcGoogle className="size-5 left-5 absolute" />
@@ -74,7 +91,7 @@ const SignInCard = ({ setState }: SignInCardProps) => {
             variant="outline"
             size="lg"
             className="w-full relative"
-            onClick={() => handleProviderSignIn("github")}
+            onClick={() => onProviderSignIn("github")}
             disabled={pending}
           >
             <FaGithub className="size-5 left-5 absolute" />
