@@ -23,9 +23,11 @@ const SignInCard = ({ setState }: SignInCardProps) => {
   const { signIn } = useAuthActions();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [pending, setPending] = useState(false);
 
   const handleProviderSignIn = (value: "github" | "google") => {
-    signIn(value);
+    setPending(true);
+    signIn(value).finally(() => setPending(false));
   };
 
   return (
@@ -42,7 +44,7 @@ const SignInCard = ({ setState }: SignInCardProps) => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            disabled={false}
+            disabled={pending}
           />
           <Input
             type="password"
@@ -50,7 +52,7 @@ const SignInCard = ({ setState }: SignInCardProps) => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            disabled={false}
+            disabled={pending}
           />
           <Button type="submit" className="w-full" size="lg" disabled={false}>
             登录
@@ -63,7 +65,7 @@ const SignInCard = ({ setState }: SignInCardProps) => {
             size="lg"
             className="w-full relative"
             onClick={() => handleProviderSignIn("google")}
-            disabled={false}
+            disabled={pending}
           >
             <FcGoogle className="size-5 left-5 absolute" />
             谷歌登陆
@@ -73,7 +75,7 @@ const SignInCard = ({ setState }: SignInCardProps) => {
             size="lg"
             className="w-full relative"
             onClick={() => handleProviderSignIn("github")}
-            disabled={false}
+            disabled={pending}
           >
             <FaGithub className="size-5 left-5 absolute" />
             Github登陆
