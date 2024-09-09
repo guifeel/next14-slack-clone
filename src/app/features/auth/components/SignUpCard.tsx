@@ -22,6 +22,7 @@ interface SignUpCardProps {
 
 const SignUpCard = ({ setState }: SignUpCardProps) => {
   const { signIn } = useAuthActions();
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -42,7 +43,7 @@ const SignUpCard = ({ setState }: SignUpCardProps) => {
     }
 
     setPending(true);
-    signIn("password", { email, password, flow: "signUp" })
+    signIn("password", { name, email, password, flow: "signUp" })
       .catch(() => setError("异常错误，请重试！"))
       .finally(() => setPending(false));
   };
@@ -61,6 +62,13 @@ const SignUpCard = ({ setState }: SignUpCardProps) => {
       )}
       <CardContent className="px-0 pt-0 space-y-5">
         <form className="space-y-2.5" onSubmit={onPasswordSignUp}>
+          <Input
+            placeholder="姓名"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            disabled={false}
+          />
           <Input
             type="email"
             placeholder="邮箱"
@@ -85,7 +93,7 @@ const SignUpCard = ({ setState }: SignUpCardProps) => {
             required
             disabled={false}
           />
-          <Button type="submit" className="w-full" size="lg" disabled={false}>
+          <Button type="submit" className="w-full" size="lg" disabled={pending}>
             注册
           </Button>
         </form>
