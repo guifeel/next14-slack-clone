@@ -1,17 +1,30 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { useAuthActions } from "@convex-dev/auth/react";
+import { useEffect, useMemo } from "react";
 import UserButton from "./features/auth/components/UserButton";
+import { useGetWorkspaces } from "./features/workspaces/api/useGetWorkspaces";
+import { useCreateWorkspaceModal } from "./features/workspaces/store/useCreateWorkspaceModal";
 
 export default function Home() {
-  const { signOut } = useAuthActions();
+  const [open, setOpen] = useCreateWorkspaceModal(); // 这里是[]不是{}
+
+  const { data, isLoading } = useGetWorkspaces();
+
+  const workspacesId = useMemo(() => data?.[0]?._id, [data]);
+
+  useEffect(() => {
+    if (isLoading) return;
+
+    if (workspacesId) {
+      console.log("重定向至workspace");
+    } else if (!open) {
+      setOpen(true);
+    }
+  }, [workspacesId, isLoading, open, setOpen]);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      已登录
+    <>
       <UserButton />
-      <Button onClick={() => signOut()}>退出</Button>
-    </main>
+    </>
   );
 }

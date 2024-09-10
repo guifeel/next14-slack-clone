@@ -11,7 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../../../../components/ui/dropdown-menu";
-import { useCurrentUser } from "../hooks/useCurrentUser";
+import { useCurrentUser } from "../api/useCurrentUser";
 
 const UserButton = () => {
   const { data, isLoading } = useCurrentUser();
