@@ -1,4 +1,6 @@
+"use client";
 import React from "react";
+import Sidebar from "./Sidebar";
 import Toolbar from "./Toolbar";
 
 interface WorkspaceIdLayoutProps {
@@ -9,7 +11,10 @@ const WorkspaceIdLayout = ({ children }: WorkspaceIdLayoutProps) => {
   return (
     <div className="h-full">
       <Toolbar />
-      {children}
+      <div className="h-[calc(100vh-40px)] flex ">
+        <Sidebar />
+        {children}
+      </div>
     </div>
   );
 };

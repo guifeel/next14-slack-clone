@@ -1,3 +1,4 @@
+"use client";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { Loader, LogOut } from "lucide-react";
 import {

@@ -1,5 +1,3 @@
-"use client";
-
 import { useGetWorkspace } from "@/app/features/workspaces/api/useGetWorkspace";
 import { useWorkspaceId } from "@/components/hooks/useWorkspaceId";
 import { Button } from "@/components/ui/button";
