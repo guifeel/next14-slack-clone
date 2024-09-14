@@ -11,6 +11,7 @@ import {
   SendHorizonal,
 } from "lucide-react";
 import SidebarItem from "./SidebarItem";
+import UserItem from "./UserItem";
 import WorkspaceHeader from "./WorkspaceHeader";
 import WorkspaceSection from "./WorkspaceSection";
 
@@ -66,7 +67,16 @@ const WorkspaceSidebar = () => {
           />
         ))}
       </WorkspaceSection>
-      {members?.map((item) => <div key={item._id}>{item.user.name}</div>)}
+      <WorkspaceSection label="直达消息" hint="新的直达" onNew={() => {}}>
+        {members?.map((item) => (
+          <UserItem
+            id={item._id}
+            key={item._id}
+            label={item.user.name}
+            image={item.user.image}
+          />
+        ))}
+      </WorkspaceSection>
     </div>
   );
 };
