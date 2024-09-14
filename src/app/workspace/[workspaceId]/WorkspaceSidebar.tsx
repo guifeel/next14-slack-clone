@@ -1,4 +1,5 @@
 import { useCurrentMember } from "@/app/features/memebers/api/useCurrentMember";
+import { useGetMember } from "@/app/features/memebers/api/useGetMembers";
 import { useGetChannels } from "@/app/features/workspaces/api/useGetChannel";
 import { useGetWorkspace } from "@/app/features/workspaces/api/useGetWorkspace";
 import { useWorkspaceId } from "@/components/hooks/useWorkspaceId";
@@ -22,6 +23,9 @@ const WorkspaceSidebar = () => {
     id: workspaceId,
   });
   const { data: channels, isLoading: channelsLoading } = useGetChannels({
+    workspaceId,
+  });
+  const { data: members, isLoading: membersLoadingg } = useGetMember({
     workspaceId,
   });
 
@@ -62,6 +66,7 @@ const WorkspaceSidebar = () => {
           />
         ))}
       </WorkspaceSection>
+      {members?.map((item) => <div key={item._id}>{item.user.name}</div>)}
     </div>
   );
 };
