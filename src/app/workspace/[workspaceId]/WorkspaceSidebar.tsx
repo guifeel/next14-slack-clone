@@ -1,7 +1,13 @@
 import { useCurrentMember } from "@/app/features/memebers/api/useCurrentMember";
 import { useGetWorkspace } from "@/app/features/workspaces/api/useGetWorkspace";
 import { useWorkspaceId } from "@/components/hooks/useWorkspaceId";
-import { AlertTriangle, Loader } from "lucide-react";
+import {
+  AlertTriangle,
+  Loader,
+  MessageSquareText,
+  SendHorizonal,
+} from "lucide-react";
+import SidebarItem from "./SidebarItem";
 import WorkspaceHeader from "./WorkspaceHeader";
 
 const WorkspaceSidebar = () => {
@@ -36,6 +42,10 @@ const WorkspaceSidebar = () => {
         workspace={workspace}
         isAdmin={member.role === "admin"}
       />
+      <div className="flex flex-col px-2 mt-3">
+        <SidebarItem label="对话列表" icon={MessageSquareText} id="threads" />
+        <SidebarItem label="草稿 & 发送" icon={SendHorizonal} id="drafts" />
+      </div>
     </div>
   );
 };
