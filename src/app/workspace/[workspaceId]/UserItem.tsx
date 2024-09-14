@@ -34,7 +34,7 @@ const UserItem = ({ id, label, image, variant }: UserItemProps) => {
 
   return (
     <Button
-      value="transparant"
+      variant="transparant"
       className={cn(userItemVariants({ variant: variant }))}
       size="sm"
       asChild
