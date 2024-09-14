@@ -1,14 +1,17 @@
 import { useCurrentMember } from "@/app/features/memebers/api/useCurrentMember";
+import { useGetChannels } from "@/app/features/workspaces/api/useGetChannel";
 import { useGetWorkspace } from "@/app/features/workspaces/api/useGetWorkspace";
 import { useWorkspaceId } from "@/components/hooks/useWorkspaceId";
 import {
   AlertTriangle,
+  HashIcon,
   Loader,
   MessageSquareText,
   SendHorizonal,
 } from "lucide-react";
 import SidebarItem from "./SidebarItem";
 import WorkspaceHeader from "./WorkspaceHeader";
+import WorkspaceSection from "./WorkspaceSection";
 
 const WorkspaceSidebar = () => {
   const workspaceId = useWorkspaceId();
@@ -17,6 +20,9 @@ const WorkspaceSidebar = () => {
   });
   const { data: workspace, isLoading: workspaceLoading } = useGetWorkspace({
     id: workspaceId,
+  });
+  const { data: channels, isLoading: channelsLoading } = useGetChannels({
+    workspaceId,
   });
 
   if (workspaceLoading || memberLoading) {
@@ -46,6 +52,16 @@ const WorkspaceSidebar = () => {
         <SidebarItem label="对话列表" icon={MessageSquareText} id="threads" />
         <SidebarItem label="草稿 & 发送" icon={SendHorizonal} id="drafts" />
       </div>
+      <WorkspaceSection label="频道" hint="新建频道" onNew={() => {}}>
+        {channels?.map((item) => (
+          <SidebarItem
+            key={item._id}
+            label={item.name}
+            icon={HashIcon}
+            id={item._id}
+          />
+        ))}
+      </WorkspaceSection>
     </div>
   );
 };
