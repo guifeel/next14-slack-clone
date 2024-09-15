@@ -1,6 +1,37 @@
 import { v } from "convex/values";
-import { query } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 import { auth } from "./auth";
+
+export const create = mutation({
+  args: { name: v.string(), workspaceId: v.id("workspaces") },
+  handler: async (ctx, args) => {
+    const userId = await auth.getUserId(ctx);
+
+    if (!userId) {
+      throw new Error("未鉴权");
+    }
+
+    const member = await ctx.db
+      .query("members")
+      .withIndex("by_workspace_id_user_id", (q) =>
+        q.eq("workspaceId", args.workspaceId).eq("userId", userId)
+      )
+      .unique();
+
+    if (!member || member.role !== "admin") {
+      throw new Error("未鉴权");
+    }
+
+    const parseName = args.name.replace(/\s+/g, "-").toLowerCase();
+
+    const channelId = await ctx.db.insert("channels", {
+      name: parseName,
+      workspaceId: args.workspaceId,
+    });
+
+    return channelId;
+  },
+});
 
 export const get = query({
   args: { workspaceId: v.id("workspaces") },
@@ -15,7 +46,8 @@ export const get = query({
       .query("members")
       .withIndex("by_workspace_id_user_id", (q) =>
         q.eq("workspaceId", args.workspaceId).eq("userId", userId)
-      );
+      )
+      .unique();
 
     if (!member) {
       return [];

@@ -1,3 +1,4 @@
+import { useCreateChannelModal } from "@/app/features/channels/store/useCreateChannelModal";
 import { useCurrentMember } from "@/app/features/memebers/api/useCurrentMember";
 import { useGetMember } from "@/app/features/memebers/api/useGetMembers";
 import { useGetChannels } from "@/app/features/workspaces/api/useGetChannel";
@@ -17,6 +18,7 @@ import WorkspaceSection from "./WorkspaceSection";
 
 const WorkspaceSidebar = () => {
   const workspaceId = useWorkspaceId();
+  const [_open, setOpen] = useCreateChannelModal();
   const { data: member, isLoading: memberLoading } = useCurrentMember({
     workspaceId,
   });
@@ -57,7 +59,11 @@ const WorkspaceSidebar = () => {
         <SidebarItem label="对话列表" icon={MessageSquareText} id="threads" />
         <SidebarItem label="草稿 & 发送" icon={SendHorizonal} id="drafts" />
       </div>
-      <WorkspaceSection label="频道" hint="新建频道" onNew={() => {}}>
+      <WorkspaceSection
+        label="频道"
+        hint="新建频道"
+        onNew={member.role === "admin" ? () => setOpen(true) : undefined}
+      >
         {channels?.map((item) => (
           <SidebarItem
             key={item._id}
@@ -67,7 +73,11 @@ const WorkspaceSidebar = () => {
           />
         ))}
       </WorkspaceSection>
-      <WorkspaceSection label="直达消息" hint="新的直达" onNew={() => {}}>
+      <WorkspaceSection
+        label="直达消息"
+        hint="新的直达"
+        // onNew={() => {}}
+      >
         {members?.map((item) => (
           <UserItem
             id={item._id}
