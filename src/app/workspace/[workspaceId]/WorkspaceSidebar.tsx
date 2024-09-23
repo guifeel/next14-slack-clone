@@ -1,6 +1,6 @@
 import { useCreateChannelModal } from "@/app/features/channels/store/useCreateChannelModal";
 import { useCurrentMember } from "@/app/features/memebers/api/useCurrentMember";
-import { useGetMember } from "@/app/features/memebers/api/useGetMembers";
+import { useGetMembers } from "@/app/features/memebers/api/useGetMembers";
 import { useGetChannels } from "@/app/features/workspaces/api/useGetChannel";
 import { useGetWorkspace } from "@/app/features/workspaces/api/useGetWorkspace";
 import { useWorkspaceId } from "@/components/hooks/useWorkspaceId";
@@ -28,7 +28,7 @@ const WorkspaceSidebar = () => {
   const { data: channels, isLoading: channelsLoading } = useGetChannels({
     workspaceId,
   });
-  const { data: members, isLoading: membersLoadingg } = useGetMember({
+  const { data: members, isLoading: membersLoadingg } = useGetMembers({
     workspaceId,
   });
 
