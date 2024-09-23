@@ -10,6 +10,30 @@ const generateCode = () => {
   return code;
 };
 
+export const getInfoById = query({
+  args: { id: v.id("workspaces") },
+  handler: async (ctx, args) => {
+    const userId = await auth.getUserId(ctx);
+    if (!userId) {
+      return null;
+    }
+
+    const member = await ctx.db
+      .query("members")
+      .withIndex("by_workspace_id_user_id", (q) =>
+        q.eq("workspaceId", args.id).eq("userId", userId)
+      )
+      .unique();
+
+    const workspace = await ctx.db.get(args.id);
+
+    return {
+      name: workspace?.name,
+      isMemeber: !!member,
+    };
+  },
+});
+
 export const join = mutation({
   args: {
     joinCode: v.string(),
@@ -44,7 +68,7 @@ export const join = mutation({
   },
 });
 
-export const join = mutation({
+export const newJoinCode = mutation({
   args: {
     workspaceId: v.id("workspaces"),
   },
