@@ -3,7 +3,7 @@ import { useCallback, useMemo, useState } from "react";
 import { api } from "../../../../../convex/_generated/api";
 import { Id } from "../../../../../convex/_generated/dataModel";
 
-type RequestType = { workspaceId: Id<"workspaces"> };
+type RequestType = { workspaceId: Id<"workspaces">; joinCode: string };
 type ResponseType = Id<"workspaces"> | null;
 
 type Options = {
@@ -13,7 +13,7 @@ type Options = {
   throwError?: boolean;
 };
 
-export const useNewJoinCode = () => {
+export const useJoin = () => {
   const [data, setData] = useState<ResponseType>(null);
   const [error, setError] = useState<Error | null>(null);
 

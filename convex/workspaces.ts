@@ -10,7 +10,41 @@ const generateCode = () => {
   return code;
 };
 
-export const newJoinCode = mutation({
+export const join = mutation({
+  args: {
+    joinCode: v.string(),
+    workspaceId: v.id("workspaces"),
+  },
+  handler: async (ctx, args) => {
+    const userId = await auth.getUserId(ctx);
+    if (!userId) {
+      throw new Error("未鉴权");
+    }
+
+    const workspace = await ctx.db.get(args.workspaceId);
+    if (!workspace) throw new Error("未找到工作空间");
+    if (workspace?.joinCode !== args.joinCode.toLocaleLowerCase())
+      throw new Error("邀请码不可用");
+
+    const existingMember = await ctx.db
+      .query("members")
+      .withIndex("by_workspace_id_user_id", (q) =>
+        q.eq("workspaceId", args.workspaceId).eq("userId", userId)
+      )
+      .unique();
+    if (existingMember) throw new Error("已经加入该工作空间");
+
+    await ctx.db.insert("members", {
+      userId,
+      workspaceId: workspace._id,
+      role: "member",
+    });
+
+    return workspace._id;
+  },
+});
+
+export const join = mutation({
   args: {
     workspaceId: v.id("workspaces"),
   },
