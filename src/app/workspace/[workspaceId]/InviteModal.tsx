@@ -1,6 +1,4 @@
 import { useNewJoinCode } from "@/app/features/workspaces/api/useNewJoinCode";
-import { useConfirm } from "@/components/hooks/useConfirm";
-import { useWorkspaceId } from "@/components/hooks/useWorkspaceId";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,6 +8,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useConfirm } from "@/hooks/useConfirm";
+import { useWorkspaceId } from "@/hooks/useWorkspaceId";
 import { CopyIcon, RefreshCcw } from "lucide-react";
 import { toast } from "sonner";
 

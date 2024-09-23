@@ -1,5 +1,5 @@
-import { useWorkspaceId } from "@/components/hooks/useWorkspaceId";
 import { Button } from "@/components/ui/button";
+import { useWorkspaceId } from "@/hooks/useWorkspaceId";
 import { cn } from "@/lib/utils";
 import { cva, VariantProps } from "class-variance-authority";
 import { LucideIcon } from "lucide-react";
@@ -38,7 +38,7 @@ const SidebarItem = ({ label, id, icon: Icon, variant }: SidebarItemProps) => {
       className={cn(sidebarItemVariants({ variant: variant }))}
     >
       <Link href={`/workspace/${workspaceId}/channel/${id}`}>
-        <Icon className="size-3.5 mr-1 shrink-0"/>
+        <Icon className="size-3.5 mr-1 shrink-0" />
         <span className="text-sm truncate">{label}</span>
       </Link>
     </Button>

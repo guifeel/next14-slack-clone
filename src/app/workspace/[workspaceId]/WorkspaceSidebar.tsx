@@ -3,7 +3,8 @@ import { useCurrentMember } from "@/app/features/memebers/api/useCurrentMember";
 import { useGetMembers } from "@/app/features/memebers/api/useGetMembers";
 import { useGetChannels } from "@/app/features/workspaces/api/useGetChannels";
 import { useGetWorkspace } from "@/app/features/workspaces/api/useGetWorkspace";
-import { useWorkspaceId } from "@/components/hooks/useWorkspaceId";
+import { useChannelId } from "@/components/useChannelId";
+import { useWorkspaceId } from "@/hooks/useWorkspaceId";
 import {
   AlertTriangle,
   HashIcon,
@@ -18,6 +19,8 @@ import WorkspaceSection from "./WorkspaceSection";
 
 const WorkspaceSidebar = () => {
   const workspaceId = useWorkspaceId();
+  const channelId = useChannelId();
+
   const [_open, setOpen] = useCreateChannelModal();
   const { data: member, isLoading: memberLoading } = useCurrentMember({
     workspaceId,
@@ -70,11 +73,12 @@ const WorkspaceSidebar = () => {
             label={item.name}
             icon={HashIcon}
             id={item._id}
+            variant={channelId === item._id ? "active" : "default"}
           />
         ))}
       </WorkspaceSection>
       <WorkspaceSection
-        label="直达消息"
+        label="消息列表"
         hint="新的直达"
         // onNew={() => {}}
       >

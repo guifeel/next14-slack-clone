@@ -1,5 +1,4 @@
 "use client";
-import { useWorkspaceId } from "@/components/hooks/useWorkspaceId";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -8,11 +7,15 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { useWorkspaceId } from "@/hooks/useWorkspaceId";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 import { useCreateChannel } from "../api/useCreateChannel";
 import { useCreateChannelModal } from "../store/useCreateChannelModal";
 
 const CreateChannelModal = () => {
+  const router = useRouter();
   const workspaceId = useWorkspaceId();
   const { mutate, isPending } = useCreateChannel();
   const [open, setOpen] = useCreateChannelModal();
@@ -39,8 +42,12 @@ const CreateChannelModal = () => {
       },
       {
         onSuccess: (id) => {
-          // TODO：重定向至新频道
+          toast.success("频道创建成功");
+          router.push(`/workspace/${workspaceId}/channel/${id}`);
           handleClose();
+        },
+        onError: () => {
+          toast.error("频道创建失败");
         },
       }
     );

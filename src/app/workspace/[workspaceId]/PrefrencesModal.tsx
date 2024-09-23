@@ -2,8 +2,6 @@
 
 import { useRemoveWorkspace } from "@/app/features/workspaces/api/useRemoveWorkspace";
 import { useUpdateWorkspace } from "@/app/features/workspaces/api/useUpdateWorkspace";
-import { useConfirm } from "@/components/hooks/useConfirm";
-import { useWorkspaceId } from "@/components/hooks/useWorkspaceId";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -15,6 +13,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { useConfirm } from "@/hooks/useConfirm";
+import { useWorkspaceId } from "@/hooks/useWorkspaceId";
 import { TrashIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

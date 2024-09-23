@@ -1,6 +1,6 @@
-import { useWorkspaceId } from "@/components/hooks/useWorkspaceId";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { useWorkspaceId } from "@/hooks/useWorkspaceId";
 import { cn } from "@/lib/utils";
 import { cva, VariantProps } from "class-variance-authority";
 import Link from "next/link";

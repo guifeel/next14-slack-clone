@@ -2,7 +2,7 @@
 
 import { useGetWorkspaceInfo } from "@/app/features/workspaces/api/useGetWorkspaceInfo";
 import { useJoin } from "@/app/features/workspaces/api/useJoin";
-import { useWorkspaceId } from "@/components/hooks/useWorkspaceId";
+import { useWorkspaceId } from "@/hooks/useWorkspaceId";
 import { cn } from "@/lib/utils";
 import { Loader } from "lucide-react";
 import Image from "next/image";

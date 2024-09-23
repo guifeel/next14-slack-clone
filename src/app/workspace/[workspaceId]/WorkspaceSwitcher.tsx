@@ -1,7 +1,6 @@
 import { useGetWorkspace } from "@/app/features/workspaces/api/useGetWorkspace";
 import { useGetWorkspaces } from "@/app/features/workspaces/api/useGetWorkspaces";
 import { useCreateWorkspaceModal } from "@/app/features/workspaces/store/useCreateWorkspaceModal";
-import { useWorkspaceId } from "@/components/hooks/useWorkspaceId";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -9,6 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useWorkspaceId } from "@/hooks/useWorkspaceId";
 
 import { Loader, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";

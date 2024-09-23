@@ -1,8 +1,9 @@
 "use client";
 import { useCreateChannelModal } from "@/app/features/channels/store/useCreateChannelModal";
+import { useCurrentMember } from "@/app/features/memebers/api/useCurrentMember";
 import { useGetChannels } from "@/app/features/workspaces/api/useGetChannels";
 import { useGetWorkspace } from "@/app/features/workspaces/api/useGetWorkspace";
-import { useWorkspaceId } from "@/components/hooks/useWorkspaceId";
+import { useWorkspaceId } from "@/hooks/useWorkspaceId";
 import { Loader, TriangleAlert } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo } from "react";
@@ -12,6 +13,9 @@ const WorkSpaceIdPage = () => {
   const workspaceId = useWorkspaceId();
   const [open, setOpen] = useCreateChannelModal();
 
+  const { data: member, isLoading: memberLoading } = useCurrentMember({
+    workspaceId,
+  });
   const { data: workspace, isLoading: workspaceLoading } = useGetWorkspace({
     id: workspaceId,
   });
@@ -20,16 +24,27 @@ const WorkSpaceIdPage = () => {
   });
 
   const channelId = useMemo(() => channels?.[0]?._id, [channels]);
+  const isAdmin = useMemo(() => member?.role === "admin", [member?.role]);
 
   useEffect(() => {
-    if (workspaceLoading || channelsLoading || !workspace) return;
+    if (
+      workspaceLoading ||
+      channelsLoading ||
+      memberLoading ||
+      member ||
+      !workspace
+    )
+      return;
 
     if (channelId) {
       router.push(`/workspace/${workspaceId}/channel/${channelId}`);
-    } else if (!open) {
+    } else if (!open && isAdmin) {
       setOpen(true);
     }
   }, [
+    member,
+    memberLoading,
+    isAdmin,
     channelId,
     workspaceLoading,
     channelsLoading,
