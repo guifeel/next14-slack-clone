@@ -1,3 +1,5 @@
+"use client";
+import { useUpdateChannel } from "@/app/features/channels/api/useUpdateChannel";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,18 +11,41 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { useChannelId } from "@/hooks/useChannelId";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { TrashIcon } from "lucide-react";
 import { useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
+import { toast } from "sonner";
 
 interface HeaderProps {
   title: string;
 }
 
 const Header = ({ title }: HeaderProps) => {
+  const channelId = useChannelId();
   const [editOpen, setEditOpen] = useState(false);
   const [value, setValue] = useState(title);
+
+  const { mutate: updateChannel, isPending: channelPending } =
+    useUpdateChannel();
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    updateChannel(
+      { id: channelId, name: value },
+      {
+        onSuccess: () => {
+          toast.success("频道名称更新成功");
+          setEditOpen(false);
+        },
+        onError: () => {
+          toast.error("频道名称更新失败");
+        },
+      }
+    );
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // 输入空格替换为-----
@@ -59,10 +84,10 @@ const Header = ({ title }: HeaderProps) => {
               </DialogTrigger>
               <DialogContent>
                 <DialogTitle>重命名</DialogTitle>
-                <form className="space-y-4">
+                <form className="space-y-4" onSubmit={handleSubmit}>
                   <Input
                     value={value}
-                    disabled={false}
+                    disabled={channelPending}
                     onChange={handleChange}
                     required
                     autoFocus
@@ -76,7 +101,7 @@ const Header = ({ title }: HeaderProps) => {
                         取消
                       </Button>
                     </DialogClose>
-                    <Button disabled={false}>保存</Button>
+                    <Button disabled={channelPending}>保存</Button>
                   </DialogFooter>
                 </form>
               </DialogContent>
