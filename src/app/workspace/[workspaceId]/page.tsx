@@ -1,7 +1,7 @@
 "use client";
+import { useGetChannels } from "@/app/features/channels/api/useGetChannels";
 import { useCreateChannelModal } from "@/app/features/channels/store/useCreateChannelModal";
 import { useCurrentMember } from "@/app/features/memebers/api/useCurrentMember";
-import { useGetChannels } from "@/app/features/workspaces/api/useGetChannels";
 import { useGetWorkspace } from "@/app/features/workspaces/api/useGetWorkspace";
 import { useWorkspaceId } from "@/hooks/useWorkspaceId";
 import { Loader, TriangleAlert } from "lucide-react";
@@ -70,7 +70,6 @@ const WorkSpaceIdPage = () => {
       </div>
     );
   }
-  return <div>workspace</div>;
 };
 
 export default WorkSpaceIdPage;
