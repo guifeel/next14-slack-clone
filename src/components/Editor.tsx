@@ -71,6 +71,27 @@ const Editor = ({
     const options: QuillOptions = {
       theme: "snow",
       placeholder: placeholderRef.current,
+      // 修改enter和shift enter按键
+      modules: {
+        keyboard: {
+          bindings: {
+            enter: {
+              key: "Enter",
+              handler: () => {
+                // TODO : 提交form
+                return;
+              },
+            },
+            shift_enter: {
+              key: "Enter",
+              shiftKey: true,
+              handler: () => {
+                quill.insertText(quill.getSelection()?.index || 0, "\n");
+              },
+            },
+          },
+        },
+      },
     };
 
     const quill = new Quill(editorContainer, options);
