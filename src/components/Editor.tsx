@@ -1,4 +1,10 @@
-import { MutableRefObject, useEffect, useLayoutEffect, useRef } from "react";
+import {
+  MutableRefObject,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { Button } from "@/components/ui/button";
 import Quill, { type QuillOptions } from "quill";
@@ -35,6 +41,8 @@ const Editor = ({
   innerRef,
   variant = "create",
 }: EditorProps) => {
+  const [text, setText] = useState("");
+
   const containerRef = useRef<HTMLDivElement>(null);
 
   const submitRef = useRef(onSubmit);
@@ -69,12 +77,17 @@ const Editor = ({
     quillRef.current = quill;
     quillRef.current.focus();
 
+    // 用于在外部发完消息再，重新获取焦点
+    if (innerRef) {
+      innerRef.current = quill;
+    }
+
     return () => {
       if (container) {
         container.innerHTML = "";
       }
     };
-  }, []);
+  }, [innerRef]);
   return (
     <div className="flex flex-col">
       <div className="flex flex-col border border-slate-300 rounded-md overflow-hidden bg-white focus-within:border-slate-300 focus-within:shadow-sm transition">
