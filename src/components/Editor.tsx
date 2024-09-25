@@ -44,6 +44,8 @@ const Editor = ({
 }: EditorProps) => {
   const [text, setText] = useState("");
 
+  const [isToolbarVisible, setIsToolbarVisible] = useState(true);
+
   const containerRef = useRef<HTMLDivElement>(null);
 
   const submitRef = useRef(onSubmit);
@@ -134,6 +136,16 @@ const Editor = ({
     };
   }, [innerRef]);
 
+  // 隐藏Toolbar
+  const toggleToolbar = () => {
+    setIsToolbarVisible((current) => !current);
+    const toolbarElement = containerRef.current?.querySelector(".ql-toolbar");
+
+    if (toolbarElement) {
+      toolbarElement.classList.toggle("hidden");
+    }
+  };
+
   // const isEmpty = quillRef.current?.getText().trim() === 0;  // 为空无法获取
   const isEmpty = text.replace(/<(.|\n)*?>/g, "").trim().length === 0;
   console.log({ isEmpty, text });
@@ -143,19 +155,19 @@ const Editor = ({
       <div className="flex flex-col border border-slate-300 rounded-md overflow-hidden bg-white focus-within:border-slate-300 focus-within:shadow-sm transition">
         <div ref={containerRef} className="h-full ql-custom" />
         <div className="flex px-2 pb-2 z-[5]">
-          <Hint label="隐藏/显示">
+          <Hint label={isToolbarVisible ? "隐藏编辑器" : "显示编辑器"}>
             <Button
-              disabled={false}
+              disabled={disabled}
               size="iconSm"
               variant="ghost"
-              onClick={() => {}}
+              onClick={toggleToolbar}
             >
               <PiTextAa className="size-4" />
             </Button>
           </Hint>
           <Hint label="表情">
             <Button
-              disabled={false}
+              disabled={disabled}
               size="iconSm"
               variant="ghost"
               onClick={() => {}}
@@ -166,7 +178,7 @@ const Editor = ({
           {variant === "create" && (
             <Hint label="图片">
               <Button
-                disabled={false}
+                disabled={disabled}
                 size="iconSm"
                 variant="ghost"
                 onClick={() => {}}
@@ -196,14 +208,14 @@ const Editor = ({
             <div className="ml-auto flex items-center justify-center gap-x-2">
               <Button
                 variant="outline"
-                disabled={false}
+                disabled={disabled}
                 size="sm"
                 onClick={() => {}}
               >
                 取消
               </Button>
               <Button
-                disabled={false}
+                disabled={disabled || isEmpty}
                 size="sm"
                 onClick={() => {}}
                 className="bg-[#007a5a] hover:bg-[#007a5a]/80 text-white"
