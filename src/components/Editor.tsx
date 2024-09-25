@@ -1,20 +1,55 @@
-import { useEffect, useRef } from "react";
+import { MutableRefObject, useEffect, useLayoutEffect, useRef } from "react";
 
 import { Button } from "@/components/ui/button";
 import Quill, { type QuillOptions } from "quill";
 import "quill/dist/quill.snow.css";
 
+import { File } from "buffer";
 import { ImageIcon, Smile } from "lucide-react";
+import { Delta, Op } from "quill/core";
 import { MdSend } from "react-icons/md";
 import { PiTextAa } from "react-icons/pi";
 import Hint from "./Hint";
 
+type EditorValue = {
+  image: File | null;
+  body: string;
+};
 interface EditorProps {
+  onSubmit: ({ image, body }: EditorValue) => void;
+  onCancel?: () => void;
+  placeholder?: string;
+  defaultValue?: Delta | Op[];
+  disabled?: boolean;
+  innerRef?: MutableRefObject<Quill | null>;
+
   variant?: "create" | "update";
 }
 
-const Editor = ({ variant = "create" }: EditorProps) => {
+const Editor = ({
+  onSubmit,
+  onCancel,
+  placeholder = "来冒个泡儿吧。。。",
+  defaultValue = [],
+  disabled = false,
+  innerRef,
+  variant = "create",
+}: EditorProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const submitRef = useRef(onSubmit);
+  const placeholderRef = useRef(placeholder);
+  const quillRef = useRef<Quill | null>(null);
+  const defaultValueRef = useRef(defaultValue);
+  const disabledRef = useRef(disabled);
+
+  // 这样来回转转，就不用写在useEffect中依赖]
+  useLayoutEffect(() => {
+    submitRef.current = onSubmit;
+    placeholderRef.current = placeholder;
+    defaultValueRef.current = defaultValue;
+    disabledRef.current = disabled;
+  });
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -26,6 +61,7 @@ const Editor = ({ variant = "create" }: EditorProps) => {
 
     const options: QuillOptions = {
       theme: "snow",
+      placeholder: placeholderRef.current,
     };
 
     new Quill(editorContainer, options);
