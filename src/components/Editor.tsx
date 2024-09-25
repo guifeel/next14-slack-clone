@@ -82,9 +82,27 @@ const Editor = ({
       innerRef.current = quill;
     }
 
+    // 下面方法也是防止重渲染
+    quill.setContents(defaultValueRef.current);
+    setText(quill.getText());
+    quill.on(Quill.events.TEXT_CHANGE, () => {
+      setText(quill.getText());
+    });
+
     return () => {
+      // 清空
+      quill.off(Quill.events.TEXT_CHANGE);
+
       if (container) {
         container.innerHTML = "";
+      }
+
+      // 清空
+      if (quillRef.current) {
+        quillRef.current = null;
+      }
+      if (innerRef) {
+        innerRef.current = null;
       }
     };
   }, [innerRef]);
