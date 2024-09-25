@@ -73,6 +73,11 @@ const Editor = ({
       placeholder: placeholderRef.current,
       // 修改enter和shift enter按键
       modules: {
+        toolbar: [
+          ["bold", "italic", "strike"],
+          ["link"],
+          [{ list: "ordered" }, { list: "bullet" }],
+        ],
         keyboard: {
           bindings: {
             enter: {
