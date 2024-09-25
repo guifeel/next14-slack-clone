@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import Quill, { type QuillOptions } from "quill";
 import "quill/dist/quill.snow.css";
 
+import { cn } from "@/lib/utils";
 import { File } from "buffer";
 import { ImageIcon, Smile } from "lucide-react";
 import { Delta, Op } from "quill/core";
@@ -106,6 +107,11 @@ const Editor = ({
       }
     };
   }, [innerRef]);
+
+  // const isEmpty = quillRef.current?.getText().trim() === 0;  // 为空无法获取
+  const isEmpty = text.replace(/<(.|\n)*?>/g, "").trim().length === 0;
+  console.log({ isEmpty, text });
+
   return (
     <div className="flex flex-col">
       <div className="flex flex-col border border-slate-300 rounded-md overflow-hidden bg-white focus-within:border-slate-300 focus-within:shadow-sm transition">
@@ -146,10 +152,16 @@ const Editor = ({
 
           {variant === "create" && (
             <Button
-              disabled={false}
+              // disabled在组件中用正常的，在useEffect中用disabledRef不引起重渲染
+              disabled={disabled || isEmpty}
               size="iconSm"
               onClick={() => {}}
-              className="ml-auto bg-[#007a5a] hover:bg-[#007a5a]/80 text-white"
+              className={cn(
+                "ml-auto",
+                isEmpty
+                  ? "bg-white hover:bg-white text-muted-foreground"
+                  : "bg-[#007a5a] hover:bg-[#007a5a]/80 text-white"
+              )}
             >
               <MdSend className="size-4" />
             </Button>
