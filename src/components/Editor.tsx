@@ -64,7 +64,11 @@ const Editor = ({
       placeholder: placeholderRef.current,
     };
 
-    new Quill(editorContainer, options);
+    const quill = new Quill(editorContainer, options);
+    // 自动动聚焦
+    quillRef.current = quill;
+    quillRef.current.focus();
+
     return () => {
       if (container) {
         container.innerHTML = "";
