@@ -226,7 +226,12 @@ const Editor = ({
           )}
         </div>
       </div>
-      <div className="p-2 text-[10px] text-muted-foreground flex justify-end">
+      <div
+        className={cn(
+          "p-2 text-[10px] text-muted-foreground flex justify-end opacity-0 transition",
+          !isEmpty && "opacity-100"
+        )}
+      >
         <p>
           <strong>Shift + Enter</strong> 进行换行操作
         </p>
