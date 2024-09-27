@@ -91,7 +91,17 @@ const Editor = ({
               key: "Enter",
               handler: () => {
                 // TODO : 提交form
-                return;
+                const text = quill.getText();
+                const addedImage = imageElementRef.current?.files?.[0] || null;
+
+                const isEmpty =
+                  !addedImage &&
+                  text.replace(/<(.|\n)*?>/g, "").trim().length === 0;
+
+                if (isEmpty) return;
+
+                const body = JSON.stringify(quill.getContents());
+                submitRef.current?.({ body, image: addedImage });
               },
             },
             shift_enter: {
@@ -160,7 +170,7 @@ const Editor = ({
 
   // const isEmpty = quillRef.current?.getText().trim() === 0;  // 为空无法获取
   // 用于空不发送逻辑处理
-  const isEmpty = text.replace(/<(.|\n)*?>/g, "").trim().length === 0;
+  const isEmpty = !image && text.replace(/<(.|\n)*?>/g, "").trim().length === 0;
 
   return (
     <div className="flex flex-col">
@@ -235,7 +245,12 @@ const Editor = ({
               // disabled在组件中用正常的，在useEffect中用disabledRef不引起重渲染
               disabled={disabled || isEmpty}
               size="iconSm"
-              onClick={() => {}}
+              onClick={() => {
+                onSubmit({
+                  body: JSON.stringify(quillRef.current?.getContents()),
+                  image,
+                });
+              }}
               className={cn(
                 "ml-auto",
                 isEmpty
@@ -252,14 +267,19 @@ const Editor = ({
                 variant="outline"
                 disabled={disabled}
                 size="sm"
-                onClick={() => {}}
+                onClick={onCancel}
               >
                 取消
               </Button>
               <Button
                 disabled={disabled || isEmpty}
                 size="sm"
-                onClick={() => {}}
+                onClick={() => {
+                  onSubmit({
+                    body: JSON.stringify(quillRef.current?.getContents()),
+                    image,
+                  });
+                }}
                 className="bg-[#007a5a] hover:bg-[#007a5a]/80 text-white"
               >
                 保存
