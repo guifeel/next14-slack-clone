@@ -25,11 +25,11 @@ export default defineSchema({
   messages: defineTable({
     body: v.string(),
     image: v.optional(v.id("_storage")),
-    memeberId: v.id("members"),
+    memberId: v.id("members"),
     workspaceId: v.id("workspaces"),
-    channelId: v.optional(v.id("channnels")),
+    channelId: v.optional(v.id("channels")),
     parentMessageId: v.optional(v.id("messages")),
-    //TODO:add conversationId
-    updateAt: v.number(),
+    // conversationId: v.optional(v.id("conversations")),
+    updatedAt: v.optional(v.number()),
   }),
 });
