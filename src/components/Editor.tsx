@@ -16,6 +16,7 @@ import { ImageIcon, Smile } from "lucide-react";
 import { Delta, Op } from "quill/core";
 import { MdSend } from "react-icons/md";
 import { PiTextAa } from "react-icons/pi";
+import EmojiPopover from "./EmojiPopover";
 import Hint from "./Hint";
 
 type EditorValue = {
@@ -146,9 +147,16 @@ const Editor = ({
     }
   };
 
+  // 插入表情，插入当前文本内
+  const onEmojiSelect = (emoji: any) => {
+    const quill = quillRef.current;
+
+    quill?.insertText(quill?.getSelection()?.index || 0, emoji.native);
+  };
+
   // const isEmpty = quillRef.current?.getText().trim() === 0;  // 为空无法获取
+  // 用于空不发送逻辑处理
   const isEmpty = text.replace(/<(.|\n)*?>/g, "").trim().length === 0;
-  console.log({ isEmpty, text });
 
   return (
     <div className="flex flex-col">
@@ -165,7 +173,7 @@ const Editor = ({
               <PiTextAa className="size-4" />
             </Button>
           </Hint>
-          <Hint label="表情">
+          <EmojiPopover onEmojiSelect={onEmojiSelect}>
             <Button
               disabled={disabled}
               size="iconSm"
@@ -174,7 +182,7 @@ const Editor = ({
             >
               <Smile className="size-4" />
             </Button>
-          </Hint>
+          </EmojiPopover>
           {variant === "create" && (
             <Hint label="图片">
               <Button
