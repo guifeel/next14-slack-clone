@@ -1,6 +1,6 @@
 import { paginationOptsValidator } from "convex/server";
 import { v } from "convex/values";
-import { Id } from "./_generated/dataModel";
+import { Doc, Id } from "./_generated/dataModel";
 import { mutation, query, QueryCtx } from "./_generated/server";
 import { auth } from "./auth";
 
@@ -105,7 +105,75 @@ export const get = query({
       .order("desc")
       .paginate(args.paginationOpts);
 
-    return results;
+    return {
+      ...results,
+      page: (
+        await Promise.all(
+          results.page.map(async (message) => {
+            const member = await populateMember(ctx, message.memberId);
+            const user = member ? await populateUser(ctx, member.userId) : null;
+
+            if (!member || !user) {
+              return null;
+            }
+
+            const reactions = await populateReactions(ctx, message._id);
+            const thread = await populateThread(ctx, message._id);
+            const image = message.image
+              ? await ctx.storage.getUrl(message.image)
+              : undefined;
+
+            const reactionsWithCounts = reactions.map((reaction) => {
+              return {
+                ...reaction,
+                count: reactions.filter((r) => r.value === reaction.value)
+                  .length,
+              };
+            });
+
+            const dedupedReactions = reactionsWithCounts.reduce(
+              (acc, reaction) => {
+                const existingReaction = acc.find(
+                  (r) => r.value === reaction.value
+                );
+
+                if (existingReaction) {
+                  existingReaction.memberIds = Array.from(
+                    new Set([...existingReaction.memberIds, reaction.memberId])
+                  );
+                } else {
+                  acc.push({ ...reaction, memberIds: [reaction.memberId] });
+                }
+
+                return acc;
+              },
+              [] as (Doc<"reactions"> & {
+                count: number;
+                memberIds: Id<"members">[];
+              })[]
+            );
+
+            const reactionsWithoutMemberIdProperty = dedupedReactions.map(
+              ({ memberId, ...rest }) => rest
+            );
+
+            return {
+              ...message,
+              image,
+              member,
+              user,
+              reactions: reactionsWithoutMemberIdProperty,
+              threadCount: thread.count,
+              threadImage: thread.image,
+              // threadName: thread.name,
+              threadTimestamp: thread.timestamp,
+            };
+          })
+        )
+      ).filter(
+        (message): message is NonNullable<typeof message> => message !== null
+      ),
+    };
   },
 });
 
@@ -151,6 +219,7 @@ export const create = mutation({
       conversationId: _conversationId,
       workspaceId: args.workspaceId,
       parentMessageId: args.parentMessageId,
+      // 前面messges的schema是optional，这里就可以不写updatedAt: v.optional(v.number()),
     });
 
     return messageId;
