@@ -1,5 +1,6 @@
 import { GetMessageReturnType } from "@/app/features/messages/api/useGetMessage";
 import { format, isToday, isYesterday } from "date-fns";
+import Message from "./Message";
 
 interface MessageListProps {
   memberName?: string;
@@ -55,7 +56,29 @@ const MessageList = ({
             </span>
           </div>
           {messages.map((message, index) => {
-            return <div key={index}>{JSON.stringify(message)}</div>;
+            return (
+              <Message
+                key={message._id}
+                id={message._id}
+                memberId={message.memberId}
+                authImage={message.user.image}
+                authorName={message.user.name}
+                isAuthor={false}
+                reactions={message.reactions}
+                body={message.body}
+                image={message.image}
+                updatedAt={message.updatedAt}
+                createAt={message._creationTime}
+                isEditing={false}
+                setEditingId={() => {}}
+                isCompact={false}
+                hideThreadButton={false}
+                threadAt={message._creationTime}
+                threadCount={message.threadCount}
+                threadImage={message.threadImage}
+                threadTimestamp={message.threadTimestamp}
+              />
+            );
           })}
         </div>
       ))}
