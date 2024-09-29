@@ -80,7 +80,7 @@ const Message = ({
     <div className="flex flex-col hover:bg-gray-100/60 gap-2 px-5 py-1.5 group relative:">
       <div className="flex items-start gap-2">
         <button>
-          <Avatar className="size-5 rounded-md mr-1">
+          <Avatar className="rounded-md">
             <AvatarImage src={authorImage} className="rounded-md" />
             <AvatarFallback className="rounded-md bg-sky-500 text-white text-xs">
               {avatarFallback}
@@ -102,10 +102,12 @@ const Message = ({
               </button>
             </Hint>
           </div>
-          <Renderer value={body} />
-          {updatedAt ? (
-            <span className="text-xs text-muted-foreground">(编辑)</span>
-          ) : null}
+          <div className="flex flex-col w-full">
+            <Renderer value={body} />
+            {updatedAt ? (
+              <span className="text-xs text-muted-foreground">(编辑)</span>
+            ) : null}
+          </div>
         </div>
       </div>
     </div>
