@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import dynamic from "next/dynamic";
 import { Doc, Id } from "../../convex/_generated/dataModel";
 
@@ -49,8 +50,14 @@ const Message = ({
   threadName,
   threadTimestamp,
 }: MessageProps) => {
+  console.log(createdAt);
   return (
-    <div>
+    <div className="flex flex-col hover:bg-gray-100/60 gap-2 px-5 py-1.5 group relative:">
+      <div className="flex items-start gap-2">
+        <button className="text-xs text-muted-foreground opacity-0 group-hover:opacity-100">
+          {format(new Date(createdAt), "hh:mm")}
+        </button>
+      </div>
       <Renderer value={body} />
     </div>
   );

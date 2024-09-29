@@ -2,7 +2,7 @@ import { authTables } from "@convex-dev/auth/server";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
-export default defineSchema({
+const schema = defineSchema({
   ...authTables,
   workspaces: defineTable({
     name: v.string(),
@@ -21,13 +21,11 @@ export default defineSchema({
     name: v.string(),
     workspaceId: v.id("workspaces"),
   }).index("by_workspace_id", ["workspaceId"]),
-
   conversations: defineTable({
     workspaceId: v.id("workspaces"),
     memberOneId: v.id("members"),
     memberTwoId: v.id("members"),
   }).index("by_workspace_id", ["workspaceId"]),
-
   messages: defineTable({
     body: v.string(),
     image: v.optional(v.id("_storage")),
@@ -48,7 +46,6 @@ export default defineSchema({
       "parentMessageId",
       "conversationId",
     ]),
-
   reactions: defineTable({
     workspaceId: v.id("workspaces"),
     messageId: v.id("messages"),
@@ -59,3 +56,5 @@ export default defineSchema({
     .index("by_message_id", ["messageId"])
     .index("by_member_id", ["memberId"]),
 });
+
+export default schema;

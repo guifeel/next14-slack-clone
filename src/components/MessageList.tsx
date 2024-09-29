@@ -1,4 +1,4 @@
-import { GetMessageReturnType } from "@/app/features/messages/api/useGetMessage";
+import { GetMessagesReturnType } from "@/app/features/messages/api/useGetMessages";
 import { format, isToday, isYesterday } from "date-fns";
 import Message from "./Message";
 
@@ -8,7 +8,7 @@ interface MessageListProps {
   channelName?: string;
   channelCreationTime?: number;
   variant?: "channel" | "thread" | "conversation";
-  data: GetMessageReturnType | undefined;
+  data: GetMessagesReturnType | undefined;
   loadMore: () => void;
   isLoadingMore: boolean;
   canLoadMore: boolean;
@@ -18,16 +18,16 @@ const formatDateLabel = (dateStr: string) => {
   const date = new Date(dateStr);
   if (isToday(date)) return "今天";
   if (isYesterday(date)) return "昨天";
-  return format(date, "EEEE,MMMM d");
+  return format(date, "EEEE, MMMM d");
 };
 
 const MessageList = ({
-  memberImage,
   memberName,
+  memberImage,
   channelName,
   channelCreationTime,
-  variant = "channel",
   data,
+  variant = "channel",
   loadMore,
   isLoadingMore,
   canLoadMore,
@@ -61,21 +61,21 @@ const MessageList = ({
                 key={message._id}
                 id={message._id}
                 memberId={message.memberId}
-                authImage={message.user.image}
+                authorImage={message.user.image}
                 authorName={message.user.name}
                 isAuthor={false}
                 reactions={message.reactions}
                 body={message.body}
                 image={message.image}
                 updatedAt={message.updatedAt}
-                createAt={message._creationTime}
+                createdAt={message._creationTime}
                 isEditing={false}
                 setEditingId={() => {}}
                 isCompact={false}
-                hideThreadButton={false}
-                threadAt={message._creationTime}
+                hideThreadButton={variant === "thread"}
                 threadCount={message.threadCount}
                 threadImage={message.threadImage}
+                threadName={message.threadName}
                 threadTimestamp={message.threadTimestamp}
               />
             );

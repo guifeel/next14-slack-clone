@@ -1,6 +1,6 @@
 "use client";
 import { useGetChannel } from "@/app/features/channels/api/useGetChannel";
-import { useGetMessages } from "@/app/features/messages/api/useGetMessage";
+import { useGetMessages } from "@/app/features/messages/api/useGetMessages";
 import MessageList from "@/components/MessageList";
 import { useChannelId } from "@/hooks/useChannelId";
 import { Loader, TriangleAlert } from "lucide-react";
