@@ -110,7 +110,8 @@ export const getById = query({
     const userId = await auth.getUserId(ctx);
 
     if (!userId) {
-      return [];
+      // 如果这里写成return []，后面的api返回的channel就会变成never[]
+      return null;
     }
 
     const channel = await ctx.db.get(args.id);
