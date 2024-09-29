@@ -82,9 +82,7 @@ const Message = ({
         <button>
           <Avatar className="rounded-md">
             <AvatarImage src={authorImage} className="rounded-md" />
-            <AvatarFallback className="rounded-md bg-sky-500 text-white text-xs">
-              {avatarFallback}
-            </AvatarFallback>
+            <AvatarFallback>{avatarFallback}</AvatarFallback>
           </Avatar>
         </button>
         <div className="flex flex-col w-full overflow-hidden">
