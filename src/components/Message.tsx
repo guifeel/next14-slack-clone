@@ -58,10 +58,10 @@ const Message = ({
 }: MessageProps) => {
   if (isCompact) {
     return (
-      <div className="flex flex-col hover:bg-gray-100/60 gap-2 px-5 py-1.5 group relative:">
+      <div className="flex flex-col hover:bg-gray-100/60 gap-2 px-5 p-1.5 group relative">
         <div className="flex items-start gap-2">
           <Hint label={formatFullTime(new Date(createdAt))}>
-            <button className="text-xs text-muted-foreground opacity-0 group-hover:opacity-100">
+            <button className="text-xs text-muted-foreground opacity-0 group-hover:opacity-100 mr-2">
               {format(new Date(createdAt), "hh:mm")}
             </button>
           </Hint>
@@ -79,7 +79,7 @@ const Message = ({
 
   const avatarFallback = authorName.charAt(0).toUpperCase();
   return (
-    <div className="flex flex-col hover:bg-gray-100/60 gap-2 px-5 py-1.5 group relative:">
+    <div className="flex flex-col hover:bg-gray-100/60 gap-2 px-5 p-1.5 group relative">
       <div className="flex items-start gap-2">
         <button>
           <Avatar className="rounded-md">
@@ -102,13 +102,13 @@ const Message = ({
               </button>
             </Hint>
           </div>
-          <div className="flex flex-col w-full">
-            <Renderer value={body} />
-            <Thumbnail url={image} />
-            {updatedAt ? (
-              <span className="text-xs text-muted-foreground">(编辑)</span>
-            ) : null}
-          </div>
+          {/* <div className="flex flex-col w-full"> */}
+          <Renderer value={body} />
+          <Thumbnail url={image} />
+          {updatedAt ? (
+            <span className="text-xs text-muted-foreground">(编辑)</span>
+          ) : null}
+          {/* </div> */}
         </div>
       </div>
     </div>
