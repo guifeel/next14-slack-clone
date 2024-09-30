@@ -71,6 +71,35 @@ const getMember = async (
     .unique();
 };
 
+export const remove = mutation({
+  args: {
+    id: v.id("messages"),
+  },
+  handler: async (ctx, args) => {
+    const userId = await auth.getUserId(ctx);
+
+    if (!userId) {
+      throw new Error("Unauthorized");
+    }
+
+    const message = await ctx.db.get(args.id);
+
+    if (!message) {
+      throw new Error("消息未找到");
+    }
+
+    const member = await getMember(ctx, message.workspaceId, userId);
+
+    if (!member || member._id !== message.memberId) {
+      throw new Error("未鉴权");
+    }
+
+    await ctx.db.delete(args.id);
+
+    return args.id;
+  },
+});
+
 export const update = mutation({
   args: {
     id: v.id("messages"),
