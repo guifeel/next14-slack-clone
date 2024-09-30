@@ -1,5 +1,10 @@
+import { useCurrentMember } from "@/app/features/memebers/api/useCurrentMember";
 import { GetMessagesReturnType } from "@/app/features/messages/api/useGetMessages";
+import { useWorkspaceId } from "@/hooks/useWorkspaceId";
 import { differenceInMinutes, format, isToday, isYesterday } from "date-fns";
+import { useState } from "react";
+import { Id } from "../../convex/_generated/dataModel";
+import ChannelHero from "./ChannelHero";
 import Message from "./Message";
 
 const TIME_THRESHOLD = 5;
@@ -34,6 +39,11 @@ const MessageList = ({
   isLoadingMore,
   canLoadMore,
 }: MessageListProps) => {
+  const [editingId, setEditingId] = useState<Id<"messages"> | null>(null);
+
+  const workspaceId = useWorkspaceId();
+  const { data: currentMember } = useCurrentMember({ workspaceId });
+
   const groupedMessages = data?.reduce(
     (groups, message) => {
       const date = new Date(message._creationTime);
@@ -74,14 +84,14 @@ const MessageList = ({
                 memberId={message.memberId}
                 authorImage={message.user.image}
                 authorName={message.user.name}
-                isAuthor={false}
+                isAuthor={message.memberId === currentMember?._id}
                 reactions={message.reactions}
                 body={message.body}
                 image={message.image}
                 updatedAt={message.updatedAt}
                 createdAt={message._creationTime}
-                isEditing={false}
-                setEditingId={() => {}}
+                isEditing={editingId === message._id}
+                setEditingId={setEditingId}
                 isCompact={isCompact}
                 hideThreadButton={variant === "thread"}
                 threadCount={message.threadCount}
@@ -91,6 +101,12 @@ const MessageList = ({
               />
             );
           })}
+          {variant === "channel" && channelName && channelCreationTime && (
+            <ChannelHero
+              name={channelName}
+              creationTime={channelCreationTime}
+            />
+          )}
         </div>
       ))}
     </div>
