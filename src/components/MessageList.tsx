@@ -61,6 +61,12 @@ const MessageList = ({
     <div className="flex-1 flex flex-col-reverse pb-4 overflow-y-auto messages-scrollbar">
       {Object.entries(groupedMessages || {}).map(([dateKey, messages]) => (
         <div key={dateKey}>
+          {variant === "channel" && channelName && channelCreationTime && (
+            <ChannelHero
+              name={channelName}
+              creationTime={channelCreationTime}
+            />
+          )}
           <div className="text-center my-2 relative">
             <hr className="absolute top-1/2 left-0 right-0 border-t border-gray-300" />
             <span className="relative inline-block bg-white px-4 py-1 rounded-md text-xs border border-gray-300 shadow-sm">
@@ -101,12 +107,6 @@ const MessageList = ({
               />
             );
           })}
-          {variant === "channel" && channelName && channelCreationTime && (
-            <ChannelHero
-              name={channelName}
-              creationTime={channelCreationTime}
-            />
-          )}
         </div>
       ))}
     </div>
