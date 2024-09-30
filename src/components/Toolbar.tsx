@@ -35,21 +35,36 @@ const Toolbar = ({
         </EmojiPopover>
         {!hideThreadButton && (
           <Hint label="回复">
-            <Button size="iconSm" variant="ghost" disabled={isPending}>
+            <Button
+              size="iconSm"
+              variant="ghost"
+              disabled={isPending}
+              onClick={handleThread}
+            >
               <MessageSquareTextIcon className="size-4" />
             </Button>
           </Hint>
         )}
         {isAuthor && (
           <Hint label="编辑">
-            <Button size="iconSm" variant="ghost" disabled={isPending}>
+            <Button
+              size="iconSm"
+              variant="ghost"
+              disabled={isPending}
+              onClick={handleEdit}
+            >
               <Pencil className="size-4" />
             </Button>
           </Hint>
         )}
         {isAuthor && (
           <Hint label="删除">
-            <Button size="iconSm" variant="ghost" disabled={isPending}>
+            <Button
+              size="iconSm"
+              variant="ghost"
+              disabled={isPending}
+              onClick={handleDelete}
+            >
               <Trash className="size-4" />
             </Button>
           </Hint>
