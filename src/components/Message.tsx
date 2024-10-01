@@ -1,5 +1,6 @@
 import { useRemoveMessage } from "@/app/features/messages/api/useRemoveMessage";
 import { useUpdateMessage } from "@/app/features/messages/api/useUpdateMessage";
+import { useToggleReaction } from "@/app/features/reactions/api/useToggleReaction";
 import { useConfirm } from "@/hooks/useConfirm";
 import { cn } from "@/lib/utils";
 import { format, isToday, isYesterday } from "date-fns";
@@ -7,6 +8,7 @@ import dynamic from "next/dynamic";
 import { toast } from "sonner";
 import { Doc, Id } from "../../convex/_generated/dataModel";
 import Hint from "./Hint";
+import Reactions from "./Reactions";
 import Thumbnail from "./Thumbnail";
 import Toolbar from "./Toolbar";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
@@ -73,7 +75,21 @@ const Message = ({
   const { mutate: removeMessage, isPending: isRemovingMessage } =
     useRemoveMessage();
 
+  const { mutate: toggleReaction, isPending: isTogglingReaction } =
+    useToggleReaction();
+
   const isPending = isUpdatingMessage;
+
+  const handleReaction = (value: string) => {
+    toggleReaction(
+      { messageId: id, value },
+      {
+        onError: () => {
+          toast.error("表情切换失败");
+        },
+      }
+    );
+  };
 
   const handleRemove = async () => {
     const ok = await confirm();
@@ -146,6 +162,7 @@ const Message = ({
                     (已编辑)
                   </span>
                 ) : null}
+                <Reactions data={reactions} onChange={handleReaction} />
               </div>
             )}
           </div>
@@ -156,7 +173,7 @@ const Message = ({
               handleEdit={() => setEditingId(id)}
               handleThread={() => {}}
               handleDelete={handleRemove}
-              handleReaction={() => {}}
+              handleReaction={handleReaction}
               hideThreadButton={hideThreadButton}
             />
           )}
@@ -216,6 +233,7 @@ const Message = ({
               {updatedAt ? (
                 <span className="text-xs text-muted-foreground">(已编辑)</span>
               ) : null}
+              <Reactions data={reactions} onChange={handleReaction} />
             </div>
           )}
         </div>
@@ -226,7 +244,7 @@ const Message = ({
             handleEdit={() => setEditingId(id)}
             handleThread={() => {}}
             handleDelete={handleRemove}
-            handleReaction={() => {}}
+            handleReaction={handleReaction}
             hideThreadButton={hideThreadButton}
           />
         )}
