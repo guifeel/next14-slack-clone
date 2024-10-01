@@ -2,6 +2,7 @@ import { useCurrentMember } from "@/app/features/memebers/api/useCurrentMember";
 import { GetMessagesReturnType } from "@/app/features/messages/api/useGetMessages";
 import { useWorkspaceId } from "@/hooks/useWorkspaceId";
 import { differenceInMinutes, format, isToday, isYesterday } from "date-fns";
+import { Loader } from "lucide-react";
 import { useState } from "react";
 import { Id } from "../../convex/_generated/dataModel";
 import ChannelHero from "./ChannelHero";
@@ -61,6 +62,32 @@ const MessageList = ({
     <div className="flex-1 flex flex-col-reverse pb-4 overflow-y-auto messages-scrollbar">
       {Object.entries(groupedMessages || {}).map(([dateKey, messages]) => (
         <div key={dateKey}>
+          <div
+            className="h-1"
+            ref={(el) => {
+              if (el) {
+                const observer = new IntersectionObserver(
+                  ([entry]) => {
+                    if (entry.isIntersecting && canLoadMore) {
+                      loadMore();
+                    }
+                  },
+                  { threshold: 1.0 }
+                );
+
+                observer.observe(el);
+                return () => observer.disconnect();
+              }
+            }}
+          />
+          {isLoadingMore && (
+            <div className="text-center my-2 relative">
+              <hr className="absolute top-1/2 left-0 right-0 border-t border-gray-300" />
+              <span className="relative inline-block bg-white px-4 py-1 rounded-md text-xs border border-gray-300 shadow-sm">
+                <Loader className="size-4 animate-spin" />
+              </span>
+            </div>
+          )}
           {variant === "channel" && channelName && channelCreationTime && (
             <ChannelHero
               name={channelName}
