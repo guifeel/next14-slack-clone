@@ -1,26 +1,104 @@
 import Message from "@/components/Message";
 import { Button } from "@/components/ui/button";
+import { useChannelId } from "@/hooks/useChannelId";
 import { useWorkspaceId } from "@/hooks/useWorkspaceId";
 import { AlertTriangle, Loader, XIcon } from "lucide-react";
-import { useState } from "react";
+import dynamic from "next/dynamic";
+import Quill from "quill";
+import { useRef, useState } from "react";
+import { toast } from "sonner";
 import { Id } from "../../../../../convex/_generated/dataModel";
 import { useCurrentMember } from "../../memebers/api/useCurrentMember";
+import { useGenerateUploadUrl } from "../../upload/api/useGenerateUploadUrl";
+import { useCreateMessage } from "../api/useCreateMessage";
 import { useGetMessage } from "../api/useGetMessage";
+
+const Editor = dynamic(() => import("@/components/Editor"), { ssr: false });
 
 interface ThreadProps {
   messageId: Id<"messages">;
   onClose: () => void;
 }
 
+type CreateMessageValues = {
+  channelId: Id<"channels">;
+  workspaceId: Id<"workspaces">;
+  parentMessageId: Id<"messages">;
+  body: string;
+  image?: Id<"_storage">;
+};
+
 const Thread = ({ messageId, onClose }: ThreadProps) => {
   const [editingId, setEditingId] = useState<Id<"messages"> | null>(null);
 
+  const [editorKey, setEditorKey] = useState(0);
+  const [isPending, setIsPending] = useState(false);
+
+  const editorRef = useRef<Quill | null>(null);
+
+  const channelId = useChannelId();
   const workspaceId = useWorkspaceId();
 
   const { data: currentMember } = useCurrentMember({ workspaceId });
   const { data: message, isLoading: loadingMessage } = useGetMessage({
     id: messageId,
   });
+
+  const { mutate: createMessage } = useCreateMessage();
+  const { mutate: generateUploadUrl } = useGenerateUploadUrl();
+
+  const handleSubmit = async ({
+    body,
+    image
+  }: {
+    body: string;
+    image: File | null;
+  }) => {
+    try {
+      setIsPending(true);
+      editorRef?.current?.enable(false);
+
+      const values:CreateMessageValues = {
+        channelId,
+        workspaceId,
+        parentMessageId: messageId,
+        body,
+        image: undefined,
+      };
+
+      if (image) {
+        const url = await generateUploadUrl({}, { throwError: true });
+
+        if (!url) {
+          throw new Error("Url not found");
+        }
+
+        const result = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": image.type },
+          body: image,
+        });
+
+        if (!result.ok) {
+          throw new Error("Failed to upload image");
+        }
+
+        const { storageId } = await result.json();
+
+        values.image = storageId;
+      }
+
+      await createMessage(values, { throwError: true });
+
+      setEditorKey((prevKey) => prevKey + 1);
+    } catch (error) {
+      toast.error("Failed to send message");
+    } finally {
+      setIsPending(false);
+      editorRef?.current?.enable(true);
+    }
+  };
+
 
   if (loadingMessage) {
     return (
@@ -72,6 +150,12 @@ const Thread = ({ messageId, onClose }: ThreadProps) => {
           setEditingId={setEditingId}
         />
       </div>
+      <Editor
+        key={editorKey}
+        onSubmit={handleSubmit}
+        disabled={isPending}
+        placeholder="回复"
+      />
     </div>
   );
 };
