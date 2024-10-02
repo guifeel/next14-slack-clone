@@ -1,13 +1,14 @@
-import { paginationOptsValidator } from "convex/server";
 import { v } from "convex/values";
+import { paginationOptsValidator } from "convex/server";
+
+import { auth } from "./auth";
 import { Doc, Id } from "./_generated/dataModel";
 import { mutation, query, QueryCtx } from "./_generated/server";
-import { auth } from "./auth";
 
 const populateThread = async (ctx: QueryCtx, messageId: Id<"messages">) => {
   const messages = await ctx.db
     .query("messages")
-    .withIndex("by_parent_message_id", (q) =>
+    .withIndex("by_parent_message_id", (q) => 
       q.eq("parentMessageId", messageId)
     )
     .collect();
@@ -59,14 +60,14 @@ const populateMember = (ctx: QueryCtx, memberId: Id<"members">) => {
 };
 
 const getMember = async (
-  ctx: QueryCtx,
-  workspaceId: Id<"workspaces">,
+  ctx: QueryCtx, 
+  workspaceId: Id<"workspaces">, 
   userId: Id<"users">
 ) => {
   return ctx.db
     .query("members")
-    .withIndex("by_workspace_id_user_id", (q) =>
-      q.eq("workspaceId", workspaceId).eq("userId", userId)
+    .withIndex("by_workspace_id_user_id", (q) => 
+      q.eq("workspaceId", workspaceId).eq("userId", userId),
     )
     .unique();
 };
@@ -85,13 +86,13 @@ export const remove = mutation({
     const message = await ctx.db.get(args.id);
 
     if (!message) {
-      throw new Error("消息未找到");
+      throw new Error("Message not found");
     }
 
     const member = await getMember(ctx, message.workspaceId, userId);
 
     if (!member || member._id !== message.memberId) {
-      throw new Error("未鉴权");
+      throw new Error("Unauthorized");
     }
 
     await ctx.db.delete(args.id);
@@ -115,13 +116,13 @@ export const update = mutation({
     const message = await ctx.db.get(args.id);
 
     if (!message) {
-      throw new Error("消息未找到");
+      throw new Error("Message not found");
     }
 
     const member = await getMember(ctx, message.workspaceId, userId);
 
     if (!member || member._id !== message.memberId) {
-      throw new Error("未鉴权");
+      throw new Error("Unauthorized");
     }
 
     await ctx.db.patch(args.id, {
@@ -133,29 +134,43 @@ export const update = mutation({
   },
 });
 
-export const getMessageById = query({
-  args: { id: v.id("messages") },
+export const getById = query({
+  args: {
+    id: v.id("messages"),
+  },
   handler: async (ctx, args) => {
     const userId = await auth.getUserId(ctx);
+
     if (!userId) {
       return null;
     }
 
     const message = await ctx.db.get(args.id);
-    if (!message) return null;
+
+    if (!message) {
+      return null;
+    }
 
     const currentMember = await getMember(ctx, message.workspaceId, userId);
+
     if (!currentMember) {
       return null;
     }
 
     const member = await populateMember(ctx, message.memberId);
-    if (!member) return null;
+
+    if (!member) {
+      return null;
+    }
 
     const user = await populateUser(ctx, member.userId);
-    if (!user) return null;
+
+    if (!user) {
+      return null;
+    }
 
     const reactions = await populateReactions(ctx, message._id);
+
     const reactionsWithCounts = reactions.map((reaction) => {
       return {
         ...reaction,
@@ -165,7 +180,9 @@ export const getMessageById = query({
 
     const dedupedReactions = reactionsWithCounts.reduce(
       (acc, reaction) => {
-        const existingReaction = acc.find((r) => r.value === reaction.value);
+        const existingReaction = acc.find(
+          (r) => r.value === reaction.value,
+        );
 
         if (existingReaction) {
           existingReaction.memberIds = Array.from(
@@ -184,7 +201,7 @@ export const getMessageById = query({
     );
 
     const reactionsWithoutMemberIdProperty = dedupedReactions.map(
-      ({ memberId, ...rest }) => rest
+      ({ memberId, ...rest }) => rest,
     );
 
     return {
@@ -227,7 +244,7 @@ export const get = query({
 
     const results = await ctx.db
       .query("messages")
-      .withIndex("by_channel_id_parent_message_id_conversation_id", (q) =>
+      .withIndex("by_channel_id_parent_message_id_conversation_id", (q) => 
         q
           .eq("channelId", args.channelId)
           .eq("parentMessageId", args.parentMessageId)
@@ -257,15 +274,14 @@ export const get = query({
             const reactionsWithCounts = reactions.map((reaction) => {
               return {
                 ...reaction,
-                count: reactions.filter((r) => r.value === reaction.value)
-                  .length,
+                count: reactions.filter((r) => r.value === reaction.value).length,
               };
             });
 
             const dedupedReactions = reactionsWithCounts.reduce(
               (acc, reaction) => {
                 const existingReaction = acc.find(
-                  (r) => r.value === reaction.value
+                  (r) => r.value === reaction.value,
                 );
 
                 if (existingReaction) {
@@ -285,7 +301,7 @@ export const get = query({
             );
 
             const reactionsWithoutMemberIdProperty = dedupedReactions.map(
-              ({ memberId, ...rest }) => rest
+              ({ memberId, ...rest }) => rest,
             );
 
             return {
@@ -303,7 +319,7 @@ export const get = query({
         )
       ).filter(
         (message): message is NonNullable<typeof message> => message !== null
-      ),
+      )
     };
   },
 });
@@ -318,39 +334,39 @@ export const create = mutation({
     parentMessageId: v.optional(v.id("messages")),
   },
   handler: async (ctx, args) => {
-    const userId = await auth.getUserId(ctx);
+		const userId = await auth.getUserId(ctx);
 
     if (!userId) {
-      throw new Error("未鉴权");
+      throw new Error("Unauthorized");
     }
 
     const member = await getMember(ctx, args.workspaceId, userId);
 
     if (!member) {
-      throw new Error("未鉴权");
+      throw new Error("Unauthorized");
     }
 
-    let _conversationId = args.conversationId;
+		let _conversationId = args.conversationId;
 
-    if (!args.conversationId && !args.channelId && args.parentMessageId) {
-      const parentMessage = await ctx.db.get(args.parentMessageId);
+   	// Only possible if we are replying in a thread in 1:1 conversation
+		if (!args.conversationId && !args.channelId && args.parentMessageId) {
+			const parentMessage = await ctx.db.get(args.parentMessageId);
 
-      if (!parentMessage) {
-        throw new Error("父级消息未找到");
-      }
+			if (!parentMessage) {
+				throw new Error("Parent message not found");
+			}
 
-      _conversationId = parentMessage.conversationId;
-    }
+			_conversationId = parentMessage.conversationId;
+		}
 
     const messageId = await ctx.db.insert("messages", {
       memberId: member._id,
       body: args.body,
       image: args.image,
       channelId: args.channelId,
-      conversationId: _conversationId,
+			conversationId: _conversationId,
       workspaceId: args.workspaceId,
       parentMessageId: args.parentMessageId,
-      // 前面messges的schema是optional，这里就可以不写updatedAt: v.optional(v.number()),
     });
 
     return messageId;

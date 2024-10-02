@@ -248,7 +248,7 @@ const Message = ({
             isAuthor={isAuthor}
             isPending={false}
             handleEdit={() => setEditingId(id)}
-            handleThread={() => {}}
+            handleThread={() => onOpenMessage(id)}
             handleDelete={handleRemove}
             handleReaction={handleReaction}
             hideThreadButton={hideThreadButton}

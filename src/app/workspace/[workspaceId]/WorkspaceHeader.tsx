@@ -72,7 +72,7 @@ const WorkspaceHeader = ({ workspace, isAdmin }: WorkspaceHeaderProps) => {
                   className="cursor-pointer py-2"
                   onClick={() => setPreferencesOpen(true)}
                 >
-                  呈现
+                  编辑工作区
                 </DropdownMenuItem>
               </>
             )}

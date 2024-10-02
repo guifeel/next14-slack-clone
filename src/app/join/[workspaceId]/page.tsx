@@ -40,10 +40,10 @@ const JoinPage = () => {
       {
         onSuccess: (id) => {
           router.replace(`/workspace/${id}`);
-          toast.success("加入工作空间成功");
+          toast.success("加入工作区成功");
         },
         onError: () => {
-          toast.error("加入工作空间失败");
+          toast.error("加入工作区失败");
         },
       }
     );
@@ -54,8 +54,8 @@ const JoinPage = () => {
       <Image src="vercel.svg" width={60} height={60} alt="Logo" />
       <div className="flex flex-col gap-y-4 items-center justify-center max-w-md">
         <div className="flex flex-col gap-y-2 items-center justify-center">
-          <h1 className="text-2xl font-bold">加入工作空间:{data?.name}</h1>
-          <p className="text-sm text-muted-foreground">请输入工作空间邀请码</p>
+          <h1 className="text-2xl font-bold">加入工作区:{data?.name}</h1>
+          <p className="text-sm text-muted-foreground">请输入工作区邀请码</p>
         </div>
         <VerificationInput
           onComplete={handleComplete}

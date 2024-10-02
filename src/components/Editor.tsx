@@ -175,7 +175,7 @@ const Editor = ({
         {!!image && (
           <div className="p-2">
             <div className="relative size-[62px] flex items-center justify-center group/image">
-              <Hint label="Remove image">
+              <Hint label="删除图片">
                 <button
                   onClick={() => {
                     setImage(null);
@@ -188,7 +188,7 @@ const Editor = ({
               </Hint>
               <Image
                 src={URL.createObjectURL(image)}
-                alt="Uploaded"
+                alt="上传图片"
                 fill
                 className="rounded-xl overflow-hidden border object-cover"
               />
@@ -196,9 +196,7 @@ const Editor = ({
           </div>
         )}
         <div className="flex px-2 pb-2 z-[5]">
-          <Hint
-            label={isToolbarVisible ? "Hide formatting" : "Show formatting"}
-          >
+          <Hint label={isToolbarVisible ? "隐藏编辑器" : "显示编辑器"}>
             <Button
               disabled={disabled}
               size="iconSm"
@@ -214,7 +212,7 @@ const Editor = ({
             </Button>
           </EmojiPopover>
           {variant === "create" && (
-            <Hint label="Image">
+            <Hint label="图片">
               <Button
                 disabled={disabled}
                 size="iconSm"

@@ -47,7 +47,7 @@ const WorkspaceSidebar = () => {
     return (
       <div className="flex flex-col gap-y-2 h-full text-[#5E2C5F] items-center justify-center">
         <AlertTriangle className="size-5  text-white" />
-        <p className="text-white text-sm">未找到工作空间</p>
+        <p className="text-white text-sm">未找到工作区</p>
       </div>
     );
   }

@@ -66,7 +66,7 @@ const WorkSpaceIdPage = () => {
     return (
       <div className="flex flex-col items-center justify-center gap-2 h-full">
         <TriangleAlert className="size-6 text-muted-foreground" />
-        <p className="text-sm text-muted-foreground">未找到工作空间</p>
+        <p className="text-sm text-muted-foreground">未找到工作区</p>
       </div>
     );
   }

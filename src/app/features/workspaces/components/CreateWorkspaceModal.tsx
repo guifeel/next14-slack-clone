@@ -34,7 +34,7 @@ export const CreateWorkspaceModal = () => {
       { name },
       {
         onSuccess(id) {
-          toast.success("工作空间创建成功！ ");
+          toast.success("工作区创建成功！ ");
           router.push(`/workspace/${id}`);
           handleClose();
         },
@@ -46,13 +46,13 @@ export const CreateWorkspaceModal = () => {
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>创建工作空间</DialogTitle>
+          <DialogTitle>创建工作区</DialogTitle>
         </DialogHeader>
         <form className="space-y-4" onSubmit={handleSumbmit}>
           <Input
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="请出入工作空间的名称，如'主页'，'工作'，'个人'。"
+            placeholder="请出入工作区的名称，如'主页'，'工作'，'个人'。"
             minLength={3}
             disabled={isPending}
             required

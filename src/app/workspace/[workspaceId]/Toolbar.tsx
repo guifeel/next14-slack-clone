@@ -17,7 +17,7 @@ const Toolbar = () => {
         >
           <Search className="size-4 text-white mr-2" />
           <span className="text-white text-xs">
-            搜索 {data?.name} 的工作空间
+            搜索 {data?.name} 的工作区
           </span>
         </Button>
       </div>

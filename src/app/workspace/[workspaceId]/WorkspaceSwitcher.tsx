@@ -1,6 +1,7 @@
 import { useGetWorkspace } from "@/app/features/workspaces/api/useGetWorkspace";
 import { useGetWorkspaces } from "@/app/features/workspaces/api/useGetWorkspaces";
 import { useCreateWorkspaceModal } from "@/app/features/workspaces/store/useCreateWorkspaceModal";
+import Hint from "@/components/Hint";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -30,15 +31,17 @@ const WorkspaceSwitcher = () => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button className="size-9 relative overflow-hidden bg-[#ABABAD] hover:bg-[#ABABAD]/80 text-slate-800 font-semibold text-xl">
-          {workspaceLoading ? (
-            <Loader className="size-5 shrink-0 animate-spin" />
-          ) : (
-            workspace?.name.charAt(0).toUpperCase()
-          )}
-        </Button>
-      </DropdownMenuTrigger>
+      <Hint label="查看空间列表">
+        <DropdownMenuTrigger asChild>
+          <Button className="size-9 relative overflow-hidden bg-[#ABABAD] hover:bg-[#ABABAD]/80 text-slate-800 font-semibold text-xl">
+            {workspaceLoading ? (
+              <Loader className="size-5 shrink-0 animate-spin" />
+            ) : (
+              workspace?.name.charAt(0).toUpperCase()
+            )}
+          </Button>
+        </DropdownMenuTrigger>
+      </Hint>
       <DropdownMenuContent side="bottom" align="start" className="w-64">
         <DropdownMenuItem
           onClick={() => router.push(`/workspace/${workspaceId}`)}
@@ -68,7 +71,7 @@ const WorkspaceSwitcher = () => {
           <div className="size-9 rounded-md text-lg relative overflow-hidden bg-[#F2F2F2] text-slate-800 font-semibold  flex items-center justify-center mr-2">
             <Plus />
           </div>
-          创建新工作空间
+          创建新工作区
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

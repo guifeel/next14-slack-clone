@@ -35,7 +35,7 @@ const PrefrenceModal = ({
   const workspaceId = useWorkspaceId();
   const [ConfirmDialog, confirm2] = useConfirm(
     "你确定要这样做吗？",
-    "这将删除这个工作空间"
+    "这将删除这个工作区"
   );
 
   const [value, setValue] = useState(initialValue);
@@ -58,11 +58,11 @@ const PrefrenceModal = ({
       },
       {
         onSuccess: () => {
-          toast.success("工作空间删除成功！");
+          toast.success("工作区删除成功！");
           router.replace("/");
         },
         onError: () => {
-          toast.error("工作空间删除失败！");
+          toast.error("工作区删除失败！");
         },
       }
     );
@@ -78,11 +78,11 @@ const PrefrenceModal = ({
       },
       {
         onSuccess: () => {
-          toast.success("工作空间名称更新成功！");
+          toast.success("工作区名称更新成功！");
           setEditOpen(false);
         },
         onError: () => {
-          toast.error("工作空间更新失败！");
+          toast.error("工作区更新失败！");
         },
       }
     );
@@ -100,7 +100,7 @@ const PrefrenceModal = ({
               <DialogTrigger asChild>
                 <div className="px-5 py-4 bg-white rounded-lg border cursor-pointer hover:bg-gray-50">
                   <div className="flex items-center justify-between">
-                    <p className="text-sm font-semibold">工作空间名称</p>
+                    <p className="text-sm font-semibold">工作区名称</p>
                     <p className="text-sm font-semibold text-[#1264A3] hover:underline">
                       编辑
                     </p>
@@ -110,7 +110,7 @@ const PrefrenceModal = ({
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>重命名工作空间</DialogTitle>
+                  <DialogTitle>重命名工作区</DialogTitle>
                 </DialogHeader>
                 <form onSubmit={handleEdit} className="space-y-4">
                   <Input
@@ -140,7 +140,7 @@ const PrefrenceModal = ({
               className="flex items-center gap-x-2 px-5 py-4 bg-white rounded-lg border cursor-pointer hover:bg-gray-50 text-rose-500"
             >
               <TrashIcon className="size-4" />
-              <p className="text-sm font-semibold">删除工作空间</p>
+              <p className="text-sm font-semibold">删除工作区</p>
             </button>
           </div>
         </DialogContent>

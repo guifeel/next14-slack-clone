@@ -7,7 +7,7 @@ interface UseGetMessageProps {
 }
 
 export const useGetMessage = ({ id }: UseGetMessageProps) => {
-  const data = useQuery(api.messages.getMessageById, { id });
+  const data = useQuery(api.messages.getById, { id });
   const isLoading = data === undefined;
 
   return { data, isLoading };

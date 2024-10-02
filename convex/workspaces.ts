@@ -46,7 +46,7 @@ export const join = mutation({
     }
 
     const workspace = await ctx.db.get(args.workspaceId);
-    if (!workspace) throw new Error("未找到工作空间");
+    if (!workspace) throw new Error("未找到工作区");
     if (workspace?.joinCode !== args.joinCode.toLocaleLowerCase())
       throw new Error("邀请码不可用");
 
@@ -56,7 +56,7 @@ export const join = mutation({
         q.eq("workspaceId", args.workspaceId).eq("userId", userId)
       )
       .unique();
-    if (existingMember) throw new Error("已经加入该工作空间");
+    if (existingMember) throw new Error("已经加入该工作区");
 
     await ctx.db.insert("members", {
       userId,
