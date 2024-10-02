@@ -2,6 +2,7 @@ import { useRemoveMessage } from "@/app/features/messages/api/useRemoveMessage";
 import { useUpdateMessage } from "@/app/features/messages/api/useUpdateMessage";
 import { useToggleReaction } from "@/app/features/reactions/api/useToggleReaction";
 import { useConfirm } from "@/hooks/useConfirm";
+import { usePanel } from "@/hooks/usePanel";
 import { cn } from "@/lib/utils";
 import { format, isToday, isYesterday } from "date-fns";
 import dynamic from "next/dynamic";
@@ -70,6 +71,8 @@ const Message = ({
     "你确定要删除这条消息吗？"
   );
 
+  const { parentMessageId, onOpenMessage, onClose } = usePanel();
+
   const { mutate: updateMessage, isPending: isUpdatingMessage } =
     useUpdateMessage();
   const { mutate: removeMessage, isPending: isRemovingMessage } =
@@ -101,7 +104,10 @@ const Message = ({
       {
         onSuccess: () => {
           toast.success("消息删除成功");
-          // TODO:关闭Thread如果open
+
+          // if (parentMessageId === id) {
+          //   onClose();
+          // }
         },
         onError: () => {
           toast.error("删除消息失败");
@@ -171,7 +177,7 @@ const Message = ({
               isAuthor={isAuthor}
               isPending={false}
               handleEdit={() => setEditingId(id)}
-              handleThread={() => {}}
+              handleThread={() => onOpenMessage(id)}
               handleDelete={handleRemove}
               handleReaction={handleReaction}
               hideThreadButton={hideThreadButton}
