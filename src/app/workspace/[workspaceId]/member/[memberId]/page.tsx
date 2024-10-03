@@ -7,6 +7,7 @@ import { AlertTriangle, Loader } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Id } from "../../../../../../convex/_generated/dataModel";
+import Conversation from "./Conversation";
 
 const MemberIdPage = () => {
   const memberId = useMemberId();
