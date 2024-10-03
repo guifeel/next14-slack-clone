@@ -6,13 +6,20 @@ interface ThreadBarProps {
   count?: number;
   image?: string;
   timestamp?: number;
+  name?: string;
   onClick?: () => void;
 }
 
-const ThreadBar = ({ count, image, timestamp, onClick }: ThreadBarProps) => {
+const ThreadBar = ({
+  count,
+  image,
+  timestamp,
+  name = "成员",
+  onClick,
+}: ThreadBarProps) => {
   if (!count || !timestamp) return null;
 
-  //   const avatarFallback = label?.charAt(0).toUpperCase();
+  const avatarFallback = name?.charAt(0).toUpperCase();
 
   return (
     <button
@@ -22,7 +29,7 @@ const ThreadBar = ({ count, image, timestamp, onClick }: ThreadBarProps) => {
       <div className="flex items-center gap-2 overflow-hidden">
         <Avatar className="size-6 shrink-0">
           <AvatarImage src={image} />
-          <AvatarFallback>M</AvatarFallback>
+          <AvatarFallback>{avatarFallback}</AvatarFallback>
         </Avatar>
         <span className="text-xs text-sky-700 hover:underline font-bold truncate">
           {count} 条回复

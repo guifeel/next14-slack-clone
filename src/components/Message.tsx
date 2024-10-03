@@ -52,7 +52,7 @@ const Message = ({
   isAuthor,
   memberId,
   authorImage,
-  authorName = "Member",
+  authorName = "成员",
   reactions,
   body,
   image,
@@ -174,6 +174,7 @@ const Message = ({
                   count={threadCount}
                   image={threadImage}
                   timestamp={threadTimestamp}
+                  name={threadName}
                   onClick={() => onOpenMessage(id)}
                 />
               </div>
@@ -251,6 +252,7 @@ const Message = ({
                 count={threadCount}
                 image={threadImage}
                 timestamp={threadTimestamp}
+                name={threadName}
                 onClick={() => onOpenMessage(id)}
               />
             </div>
