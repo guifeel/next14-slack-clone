@@ -14,11 +14,9 @@ interface ConversationProps {
 const Conversation = ({ id }: ConversationProps) => {
   const memberId = useMemberId();
 
-  const {
-    data: member,
-    isLoading,
-    memberLoading,
-  } = useGetMember({ id: memberId });
+  const { data: member, isLoading: memberLoading } = useGetMember({
+    id: memberId,
+  });
   const { results, status, loadMore } = useGetMessages({ conversationId: id });
 
   if (memberLoading || status === "LoadingFirstPage") {

@@ -6,6 +6,7 @@ import { Loader } from "lucide-react";
 import { useState } from "react";
 import { Id } from "../../convex/_generated/dataModel";
 import ChannelHero from "./ChannelHero";
+import ConversationHero from "./ConversationHero";
 import Message from "./Message";
 
 const TIME_THRESHOLD = 5;
@@ -133,6 +134,9 @@ const MessageList = ({
       )}
       {variant === "channel" && channelName && channelCreationTime && (
         <ChannelHero name={channelName} creationTime={channelCreationTime} />
+      )}
+      {variant === "conversation" && (
+        <ConversationHero name={memberName} image={memberImage} />
       )}
     </div>
   );
