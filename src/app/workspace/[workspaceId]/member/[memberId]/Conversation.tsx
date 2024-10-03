@@ -1,5 +1,6 @@
 import { useGetMember } from "@/app/features/memebers/api/useGetMember";
 import { useGetMessages } from "@/app/features/messages/api/useGetMessages";
+import MessageList from "@/components/MessageList";
 import useMemberId from "@/hooks/useMemberId";
 import { Loader } from "lucide-react";
 import { Id } from "../../../../../../convex/_generated/dataModel";
@@ -34,7 +35,15 @@ const Conversation = ({ id }: ConversationProps) => {
         memberImage={member?.user.image}
         onClick={() => {}}
       />
-
+      <MessageList
+        memberName={member?.user.name}
+        memberImage={member?.user.image}
+        data={results}
+        variant="conversation"
+        loadMore={loadMore}
+        isLoadingMore={status === "LoadingMore"}
+        canLoadMore={status === "CanLoadMore"}
+      />
       <ChatInput
         placeholder={`发送消息至 ${member?.user.name}`}
         conversationId={id}
