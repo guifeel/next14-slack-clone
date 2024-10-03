@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { Doc, Id } from "../../convex/_generated/dataModel";
 import Hint from "./Hint";
 import Reactions from "./Reactions";
+import ThreadBar from "./ThreadBar";
 import Thumbnail from "./Thumbnail";
 import Toolbar from "./Toolbar";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
@@ -169,6 +170,11 @@ const Message = ({
                   </span>
                 ) : null}
                 <Reactions data={reactions} onChange={handleReaction} />
+                <ThreadBar
+                  count={threadCount}
+                  image={threadImage}
+                  timestamp={threadTimestamp}
+                />
               </div>
             )}
           </div>
@@ -240,6 +246,11 @@ const Message = ({
                 <span className="text-xs text-muted-foreground">(已编辑)</span>
               ) : null}
               <Reactions data={reactions} onChange={handleReaction} />
+              <ThreadBar
+                count={threadCount}
+                image={threadImage}
+                timestamp={threadTimestamp}
+              />
             </div>
           )}
         </div>
