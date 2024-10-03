@@ -9,13 +9,16 @@ interface ThreadBarProps {
   onClick?: () => void;
 }
 
-const ThreadBar = ({ count, image, timestamp }: ThreadBarProps) => {
+const ThreadBar = ({ count, image, timestamp, onClick }: ThreadBarProps) => {
   if (!count || !timestamp) return null;
 
   //   const avatarFallback = label?.charAt(0).toUpperCase();
 
   return (
-    <button className="p-1 rounded-md hover:bg-white border border-transparent hover:border-border flex justify-start items-center group/thread-bar transition max-w-[600px]">
+    <button
+      onClick={onClick}
+      className="p-1 rounded-md hover:bg-white border border-transparent hover:border-border flex justify-start items-center group/thread-bar transition max-w-[600px]"
+    >
       <div className="flex items-center gap-2 overflow-hidden">
         <Avatar className="size-6 shrink-0">
           <AvatarImage src={image} />
