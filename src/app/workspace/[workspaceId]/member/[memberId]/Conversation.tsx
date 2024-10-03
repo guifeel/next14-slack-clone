@@ -3,6 +3,7 @@ import { useGetMessages } from "@/app/features/messages/api/useGetMessages";
 import useMemberId from "@/hooks/useMemberId";
 import { Loader } from "lucide-react";
 import { Id } from "../../../../../../convex/_generated/dataModel";
+import ChatInput from "./ChatInput";
 import Header from "./Header";
 
 interface ConversationProps {
@@ -32,6 +33,11 @@ const Conversation = ({ id }: ConversationProps) => {
         memberName={member?.user.name}
         memberImage={member?.user.image}
         onClick={() => {}}
+      />
+
+      <ChatInput
+        placeholder={`发送消息至 ${member?.user.name}`}
+        conversationId={id}
       />
     </div>
   );

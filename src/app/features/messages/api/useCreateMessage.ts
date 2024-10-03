@@ -7,7 +7,7 @@ type RequestType = {
   body: string;
   workspaceId: Id<"workspaces">;
   image?: Id<"_storage">;
-  channelId: Id<"channels">;
+  channelId?: Id<"channels">;
   parentMessageId?: Id<"messages">;
   conversationId?: Id<"conversations">;
 };
