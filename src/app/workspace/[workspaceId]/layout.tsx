@@ -3,6 +3,7 @@ import React from "react";
 import Sidebar from "./Sidebar";
 import Toolbar from "./Toolbar";
 
+import Profile from "@/app/features/memebers/components/Profile";
 import Thread from "@/app/features/messages/components/Thread";
 import {
   ResizableHandle,
@@ -19,9 +20,9 @@ interface WorkspaceIdLayoutProps {
 }
 
 const WorkspaceIdLayout = ({ children }: WorkspaceIdLayoutProps) => {
-  const { parentMessageId, onClose } = usePanel();
+  const { parentMessageId, profileMemberId, onClose } = usePanel();
 
-  const showPanel = !!parentMessageId;
+  const showPanel = !!parentMessageId || !!profileMemberId;
 
   return (
     <div className="h-full">
@@ -49,6 +50,8 @@ const WorkspaceIdLayout = ({ children }: WorkspaceIdLayoutProps) => {
                     messageId={parentMessageId as Id<"messages">}
                     onClose={onClose}
                   />
+                ) : profileMemberId ? (
+                  <Profile memberId={profileMemberId} onClose={onClose} />
                 ) : (
                   <div className="flex items-center justify-center h-full">
                     <Loader className=" size-4 animate-spin text-foreground" />
