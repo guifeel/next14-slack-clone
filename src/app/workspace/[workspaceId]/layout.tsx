@@ -51,7 +51,10 @@ const WorkspaceIdLayout = ({ children }: WorkspaceIdLayoutProps) => {
                     onClose={onClose}
                   />
                 ) : profileMemberId ? (
-                  <Profile memberId={profileMemberId} onClose={onClose} />
+                  <Profile
+                    memberId={profileMemberId as Id<"members">}
+                    onClose={onClose}
+                  />
                 ) : (
                   <div className="flex items-center justify-center h-full">
                     <Loader className=" size-4 animate-spin text-foreground" />
