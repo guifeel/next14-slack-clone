@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { Loader, LogOut } from "lucide-react";

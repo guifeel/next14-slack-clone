@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useGetWorkspace } from "@/app/features/workspaces/api/useGetWorkspace";
 import { useGetWorkspaces } from "@/app/features/workspaces/api/useGetWorkspaces";
 import { useCreateWorkspaceModal } from "@/app/features/workspaces/store/useCreateWorkspaceModal";

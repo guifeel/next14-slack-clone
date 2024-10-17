@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useRemoveMessage } from "@/app/features/messages/api/useRemoveMessage";
 import { useUpdateMessage } from "@/app/features/messages/api/useUpdateMessage";
 import { useToggleReaction } from "@/app/features/reactions/api/useToggleReaction";

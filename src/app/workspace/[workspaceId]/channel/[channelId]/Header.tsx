@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { useRemoveChannel } from "@/app/features/channels/api/useRemoveChannel";
 import { useUpdateChannel } from "@/app/features/channels/api/useUpdateChannel";

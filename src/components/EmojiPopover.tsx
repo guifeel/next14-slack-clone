@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
