@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useGetChannels } from "@/app/features/channels/api/useGetChannels";
 import { useCreateChannelModal } from "@/app/features/channels/store/useCreateChannelModal";
 import { useCurrentMember } from "@/app/features/memebers/api/useCurrentMember";
